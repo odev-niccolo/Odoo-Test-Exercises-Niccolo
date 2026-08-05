@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_suggestion_view_list" model="ir.ui.view">
+        <field name="name">hr.suggestion.view.list</field>
+        <field name="model">hr.suggestion</field>
+        <field name="arch" type="xml">
+            <list string="My Suggestion Box">
+                <field name="name"
+                    readonly="1" />
+                <field name="user_id"
+                    string="Suggested by"
+                    readonly="1" />
+                <field name="hr_suggestion_upvote_count" />
+                <field name="state"
+                    widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'ready_for_upvote'"
+                    decoration-success="state == 'approved'"
+                    decoration-danger="state == 'rejected'" />
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_suggestion_view_form" model="ir.ui.view">
+        <field name="name">hr.suggestion.view.form</field>
+        <field name="model">hr.suggestion</field>
+        <field name="arch" type="xml">
+            <form string="Suggestion">
+                <field name="can_approve" invisible="1" />
+                <field name="hr_suggestion_upvote_count" invisible="1" />
+                <header>
+                    <button string="Confirm" name="action_confirm" invisible="state != 'draft'" type="object" class="oe_highlight" />
+                    <button string="Approve" name="action_approve" type="object" class="oe_highlight" invisible="not can_approve" />
+                    <button string="Reset to Draft"
+                        name="action_reset_draft"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="user_id != uid or state in ['draft', 'approved', 'rejected'] or hr_suggestion_upvote_count &gt; 0" />
+                    <button string="Upvote"
+                        name="action_upvote"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="user_id == uid or state != 'ready_for_upvote'" />
+                    <button string="Reject" name="action_reject" type="object" class="oe_highlight" invisible="not can_approve" />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title" name="title">
+                        <h2>
+                            <field name="name" readonly="state != 'draft'" />
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" string="Suggested by" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="hr_suggestion_upvote_count" string="Upvotes" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" readonly="state != 'draft'" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_suggestion_my_suggestion_action" model="ir.actions.act_window">
+        <field name="name">My Suggestions</field>
+        <field name="res_model">hr.suggestion</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="hr_suggestion_to_upvote_action" model="ir.actions.act_window">
+        <field name="name">To Upvote</field>
+        <field name="res_model">hr.suggestion</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'ready_for_upvote')]</field>
+        <field name="context">{"create": False, "delete": False}</field>
+    </record>
+
+    <record id="hr_suggestion_approved_action" model="ir.actions.act_window">
+        <field name="name">Approved Suggestions</field>
+        <field name="res_model">hr.suggestion</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'approved')]</field>
+        <field name="context">{"create": False, "delete": False}</field>
+    </record>
+
+    <menuitem id="hr_suggestion_root_menu"
+        name="Suggestion Box"
+        sequence="10"
+        web_icon="hr_suggestion_box_odv,static/description/icon.png">
+        <menuitem id="hr_suggestion_my_suggestion_menu"
+            name="My Suggestions"
+            sequence="10"
+            action="hr_suggestion_my_suggestion_action" />
+        <menuitem id="hr_suggestion_to_upvote_menu"
+            name="To Upvote"
+            sequence="20"
+            action="hr_suggestion_to_upvote_action" />
+        <menuitem id="hr_suggestion_approved_menu"
+            name="Approved"
+            sequence="30"
+            action="hr_suggestion_approved_action" />
+    </menuitem>
+</odoo>
