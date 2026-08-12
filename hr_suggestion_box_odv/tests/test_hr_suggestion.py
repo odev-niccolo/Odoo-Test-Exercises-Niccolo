@@ -99,7 +99,7 @@ class TestHrSuggestionBox(TransactionCase):
         suggestion = self._create_suggestion(self.normal_employee)
         suggestion.action_confirm()
         
-        initial_count = suggestion.hr_suggestion_upvote_count
+
         # First upvote should succeed
         suggestion.with_user(self.upvote_employee).action_upvote()
         self.assertEqual(suggestion.hr_suggestion_upvote_count, 1)
