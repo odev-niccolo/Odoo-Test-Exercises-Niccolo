@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//widget[@name='web_ribbon']" position="after">
+                <field name="is_vip" invisible="1"/>
+                <widget name="web_ribbon" 
+                        title="VIP Customer" 
+                        bg_color="text-bg-success" 
+                        invisible="not is_vip"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="crm_lead2opportunity_partner_view_form_inherit" model="ir.ui.view">
+        <field name="name">crm.lead2opportunity.partner.view.form.inherit</field>
+        <field name="model">crm.lead2opportunity.partner</field>
+        <field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner"/>
+        <field name="arch" type="xml">
+            <field name="team_id" position="after">
+                <field name="create_project"/>
+            </field>
+        </field>
+    </record>
+</odoo>
