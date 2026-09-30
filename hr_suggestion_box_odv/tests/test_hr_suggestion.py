@@ -3,7 +3,7 @@ from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 from odoo.exceptions import ValidationError
 
-@tagged("post_install", "-at_install", "test_hr_suggestion")
+@tagged("post_install", "-at_install", "test_hr_suggestion_box_odv")
 class TestHrSuggestionBox(TransactionCase):
     
     ######################
@@ -48,8 +48,6 @@ class TestHrSuggestionBox(TransactionCase):
             {"name": "Upvote Employee", "user_id": cls.upvote_employee.id},
             {"name": "Suggestion Approver", "user_id": cls.suggestion_approver.id},
         ])
-
-    
 
     ######################
     # Unit Tests         #

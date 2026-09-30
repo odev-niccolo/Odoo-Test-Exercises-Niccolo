@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import models, fields, api
 
 class ResPartner(models.Model):
     ######################
@@ -20,6 +20,7 @@ class ResPartner(models.Model):
     ##############################
     # Compute and search methods #
     ##############################
+    @api.depends("invoice_ids.state", "invoice_ids.amount_total", "company_id.vip_threshold")
     def _compute_is_vip(self):
         for partner in self:
             threshold = (partner.company_id.vip_threshold
@@ -34,7 +35,7 @@ class ResPartner(models.Model):
             if partner.company_id:
                 domain.append(("company_id", "in", [partner.company_id.id, False]))
 
-            invoices = self.env["account.move"].search(domain)
+            invoices = self.env["account.move"].sudo().search(domain)
             partner.is_vip = sum(invoices.mapped("amount_total")) >= threshold
             
     ############################

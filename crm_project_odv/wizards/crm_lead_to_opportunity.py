@@ -39,9 +39,11 @@ class CrmLead2opportunityPartner(models.TransientModel):
         res = super(CrmLead2opportunityPartner, self)._convert_and_allocate(leads, user_ids, team_id=team_id)
         if self.create_project:
             for lead in leads:
-                project = self.env["project.project"].create({
-                    "name": lead.name,
-                    "partner_id": lead.partner_id.id
-                })
-                lead.write({"project_id": project.id})
+                # Fixed this to check if lead already has an existing linked project
+                if not lead.project_id:
+                    project = self.env["project.project"].create({
+                        "name": lead.name,
+                        "partner_id": lead.partner_id.id
+                    })
+                    lead.write({"project_id": project.id})
         return res

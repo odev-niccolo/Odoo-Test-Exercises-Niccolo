@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import api, models, fields, _
+from odoo.exceptions import ValidationError
 
 class ResCompany(models.Model):
     ######################
@@ -24,6 +25,10 @@ class ResCompany(models.Model):
     ############################
     # Constrains and onchanges #
     ############################
+    @api.onchange('vip_threshold')
+    def _onchange_vip_threshold(self):
+        if self.vip_threshold < 0:
+            raise ValidationError(_("The VIP Threshold can't be negative."))
 
     #########################
     # CRUD method overrides #
